@@ -1,0 +1,7 @@
+dataset/
+static/uploads/
+__pycache__/
+*.pyc
+*.pkl.bak
+*.log
+.DS_Store

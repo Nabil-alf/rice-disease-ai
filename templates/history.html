@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Riwayat Prediksi
+{% endblock %}
+
+{% block content %}
+
+<div class="container py-5">
+
+    <div class="d-flex justify-content-between align-items-center mb-4">
+
+        <h2 class="fw-bold">
+            Riwayat Prediksi
+        </h2>
+
+        <a href="/dashboard"
+           class="btn btn-success">
+
+            Prediksi Baru
+
+        </a>
+
+    </div>
+
+    <!-- SEARCH -->
+
+    <form action="/search"
+          method="GET"
+          class="mb-4">
+
+        <div class="input-group">
+
+            <input type="text"
+                   name="keyword"
+                   class="form-control"
+                   placeholder="Cari kategori...">
+
+            <button class="btn btn-success">
+
+                <i class="bi bi-search"></i>
+
+            </button>
+
+        </div>
+
+    </form>
+
+    <div class="card shadow-sm">
+
+        <div class="card-body">
+
+            <div class="table-responsive">
+
+                <table class="table table-hover align-middle">
+
+                    <thead class="table-success">
+
+                        <tr>
+
+                            <th>ID</th>
+                            <th>File</th>
+                            <th>Prediksi</th>
+                            <th>Confidence</th>
+                            <th>Tanggal</th>
+                            <th>Aksi</th>
+
+                        </tr>
+
+                    </thead>
+
+                    <tbody>
+
+                    {% for row in predictions %}
+
+                    <tr>
+
+                        <td>{{ row.id }}</td>
+
+                        <td>{{ row.filename }}</td>
+
+                        <td>
+
+                            {% if row.prediction == "Berat" %}
+
+                            <span class="badge bg-danger">
+                                Berat
+                            </span>
+
+                            {% elif row.prediction == "Sedang" %}
+
+                            <span class="badge bg-warning text-dark">
+                                Sedang
+                            </span>
+
+                            {% else %}
+
+                            <span class="badge bg-success">
+                                Sehat-Ringan
+                            </span>
+
+                            {% endif %}
+
+                        </td>
+
+                        <td>
+
+                            {{ row.confidence }}%
+
+                        </td>
+
+                        <td>
+
+                            {{ row.created_at }}
+
+                        </td>
+
+                        <td>
+
+                            <a href="/delete/{{ row.id }}"
+                               class="btn btn-danger btn-sm"
+                               onclick="return confirm('Hapus data ini?')">
+
+                                <i class="bi bi-trash"></i>
+
+                            </a>
+
+                        </td>
+
+                    </tr>
+
+                    {% endfor %}
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </div>
+
+    </div>
+
+    <!-- PAGINATION -->
+
+    {% if total_pages > 1 %}
+
+    <nav class="mt-4">
+
+        <ul class="pagination justify-content-center">
+
+            {% for p in range(1,total_pages+1) %}
+
+            <li class="page-item {% if p == page %}active{% endif %}">
+
+                <a class="page-link"
+                   href="?page={{ p }}">
+
+                    {{ p }}
+
+                </a>
+
+            </li>
+
+            {% endfor %}
+
+        </ul>
+
+    </nav>
+
+    {% endif %}
+
+</div>
+
+{% endblock %}
